@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="gitItem"
+            type="com.example.mytoyproject.network.model.Item" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/imgAvatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/StringValue"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_launcher"
+            app:avatarUrl="@{gitItem.owner.avatarUrl}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@{gitItem.owner.ownerName}"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@id/imgAvatar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="kunny/" />
+
+        <TextView
+            android:id="@+id/txtRepo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{gitItem.repositoryName}"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@id/txtName"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="kunny-kotlin-book" />
+
+        <TextView
+            android:id="@+id/txtLangguage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@{gitItem.language ?? @string/noLanguage}"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@id/imgAvatar"
+            app:layout_constraintTop_toBottomOf="@id/txtName"
+            tools:text="kotlin" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
