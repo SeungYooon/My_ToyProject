@@ -1,4 +1,4 @@
-package com.example.mytoyproject.adapter
+package com.example.mytoyproject.main.view.adapter
 
 import android.content.Intent
 import android.graphics.Color
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mytoyproject.DetailActivity
+import com.example.mytoyproject.main.view.DetailActivity
 import com.example.mytoyproject.R
 import com.example.mytoyproject.databinding.ListItemBinding
 import com.example.mytoyproject.network.model.Item
@@ -67,9 +67,11 @@ class GitAdapter(private val itemList: ArrayList<Item>) :
         }
     }
 
-    fun update(itemList: ArrayList<Item>) {
-        this.itemList.clear()
-        this.itemList.addAll(itemList)
-        notifyDataSetChanged()
+    fun updateRepo(itemList: List<Item>) {
+        this.itemList.apply {
+            clear()
+            addAll(itemList)
+            notifyDataSetChanged()
+        }
     }
 }

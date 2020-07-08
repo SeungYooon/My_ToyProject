@@ -1,4 +1,4 @@
-package com.example.mytoyproject.adapter
+package com.example.mytoyproject.main.view.adapter
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

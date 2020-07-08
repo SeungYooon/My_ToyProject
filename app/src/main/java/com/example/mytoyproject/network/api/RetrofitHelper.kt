@@ -1,4 +1,4 @@
-package com.example.mytoyproject
+package com.example.mytoyproject.network.api
 
 
 import okhttp3.OkHttpClient
@@ -9,8 +9,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitHelper {
-    private var BASE_URL: String = "https://api.github.com"
-    private val CONNECT_TIMEOUT: Long = 15
+    private const val BASE_URL = "https://api.github.com"
+    private val CONNECT_TIMEOUT: Long = 60
+    private val READ_TIMEOUT: Long = 60
+    private val WRITE_TIMEOUT: Long = 5
 
     private val okHttpClient: OkHttpClient
         get() {
@@ -19,17 +21,32 @@ object RetrofitHelper {
 
             return OkHttpClient().newBuilder()
                 .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(httpLoggingInterceptor)
                 .build()
         }
-    private val retrofit =
-        Retrofit.Builder()
+
+    private fun getRetrofit(): Retrofit {
+        return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
+    }
 
-    fun getApi(): RetrofitService = retrofit.create(RetrofitService::class.java)
+    val repoService: RepoService = getRetrofit().create(RepoService::class.java)
+
+    val userService: UserService = getRetrofit().create(UserService::class.java)
+
+    fun getRepoApi(): RepoService = getRetrofit().create(
+        RepoService::class.java
+    )
+
+    fun getUserApi(): UserService = getRetrofit().create(
+        UserService::class.java
+    )
 }
+
 
