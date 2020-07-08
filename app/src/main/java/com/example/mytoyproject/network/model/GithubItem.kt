@@ -2,30 +2,28 @@ package com.example.mytoyproject.network.model
 
 import com.google.gson.annotations.SerializedName
 
-
 data class GithubItem(
-    var items: ArrayList<Item>,
+    val items: ArrayList<Item>,
     @SerializedName("total_count")
-    var totalCount: Int
+    val totalCount: Int
 )
 
 data class Item(
     @SerializedName("name")
-    var repositoryName: String,
+    val repositoryName: String,
     @SerializedName("owner")
-    var owner: Owner,
+    val owner: Owner,
     @SerializedName("language")
-    var language: String,
+    val language: String,
     @SerializedName("stargazers_count")
-    var stargazersCount: Int,
+    val stargazersCount: Int,
     @SerializedName("description")
-    var description: String
+    val description: String
 )
 
 data class Owner(
     @SerializedName("login")
-    var ownerName: String,
+    val ownerName: String,
     @SerializedName("avatar_url")
-    var avatarUrl: String
+    val avatarUrl: String
 )
-
