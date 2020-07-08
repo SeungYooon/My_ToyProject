@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="gitItem"
             type="com.example.mytoyproject.network.model.Item" />
