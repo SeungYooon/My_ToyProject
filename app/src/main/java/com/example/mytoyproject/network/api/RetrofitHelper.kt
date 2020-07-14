@@ -39,14 +39,6 @@ object RetrofitHelper {
     val repoService: RepoService = getRetrofit().create(RepoService::class.java)
 
     val userService: UserService = getRetrofit().create(UserService::class.java)
-
-    fun getRepoApi(): RepoService = getRetrofit().create(
-        RepoService::class.java
-    )
-
-    fun getUserApi(): UserService = getRetrofit().create(
-        UserService::class.java
-    )
 }
 
 

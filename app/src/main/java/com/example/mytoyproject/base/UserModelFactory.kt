@@ -13,7 +13,6 @@ class UserModelFactory(private val userHelper: UserHelper) : ViewModelProvider.F
         if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
             return UserViewModel(UserRepository(userHelper)) as T
         }
-        throw  IllegalArgumentException("Unkown class name")
+        throw  IllegalArgumentException("Unknown class name")
     }
-
 }

@@ -13,6 +13,6 @@ class ViewModelFactory(private val repoHelper: RepoHelper) : ViewModelProvider.F
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             return MainViewModel(MainRepository(repoHelper)) as T
         }
-        throw IllegalArgumentException("Unkonw class name")
+        throw IllegalArgumentException("Unknown class name")
     }
 }

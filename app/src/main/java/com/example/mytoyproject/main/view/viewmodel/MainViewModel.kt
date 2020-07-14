@@ -19,7 +19,7 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
         try {
             emit(Resource.success(data = mainRepository.getRepo(name)))
         } catch (exception: Exception) {
-            emit(Resource.error(data = null, msg = exception.message ?: "Error Occured!"))
+            emit(Resource.error(data = null, msg = exception.message ?: "Error Occurred!"))
         }
     }
 
@@ -28,7 +28,7 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
         try {
             emit(Resource.success(data = mainRepository.getOwner(owner, repo)))
         } catch (exception: Exception) {
-            emit(Resource.error(data = null, msg = exception.message ?: "Error Occured!"))
+            emit(Resource.error(data = null, msg = exception.message ?: "Error Occurred!"))
         }
     }
 }

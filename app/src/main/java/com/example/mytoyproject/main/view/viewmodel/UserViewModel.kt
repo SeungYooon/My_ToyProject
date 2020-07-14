@@ -20,7 +20,7 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
         try {
             emit(Resource.success(data = userRepository.getUser(username)))
         } catch (exception: Exception) {
-            emit(Resource.error(data = null, msg = exception.message ?: "Error Occured!"))
+            emit(Resource.error(data = null, msg = exception.message ?: "Error Occurred!"))
         }
     }
 }
