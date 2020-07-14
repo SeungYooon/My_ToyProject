@@ -15,7 +15,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.mytoyproject.R
-import com.example.mytoyproject.RateLimitInterceptor
 import com.example.mytoyproject.base.ViewModelFactory
 import com.example.mytoyproject.main.view.adapter.GitAdapter
 import com.example.mytoyproject.databinding.ActivityMainBinding
@@ -31,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var gitAdapter: GitAdapter
     private lateinit var mainViewModel: MainViewModel
-    private val rateLimitInterceptor = RateLimitInterceptor()
 
     private var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -85,39 +83,16 @@ class MainActivity : AppCompatActivity() {
                         }
                         Status.ERROR -> {
                             pbGone()
-                            rateLimitInterceptor
+
                             it.data?.let { GithubItem ->
                                 if (GithubItem.totalCount == 0) {
                                     loadFail(t = Throwable())
                                 }
                             }
-                            Log.v("@@@@@@@", resources.message)
                         }
                     }
                 }
             })
-
-            /* val compositeDisposable = CompositeDisposable()
-
-             compositeDisposable.add(
-                 RetrofitHelper.getRepoApi().getRepo(editSearch.text.toString())
-                     .subscribeOn(Schedulers.io())
-                     .observeOn(AndroidSchedulers.mainThread())
-                     .doOnError { throwable ->
-                         Log.v("doOnError", "doOnError:" + throwable.message)
-                         loadFail(throwable)
-                         rateLimitInterceptor
-                         disconnected()
-                     }
-                     .subscribe { GithubItem ->
-                         if (GithubItem.totalCount == 0) {
-                             loadFail(t = Throwable())
-                         } else {
-                             pbGone()
-                             loadSuccess()
-                             gitAdapter.update(GithubItem.items)
-                         }
-                     })*/
         }
     }
 

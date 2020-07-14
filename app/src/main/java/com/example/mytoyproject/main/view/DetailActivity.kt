@@ -57,7 +57,6 @@ class DetailActivity : AppCompatActivity() {
         setupViewModel()
         loadDetail()
         loadFollow()
-
     }
 
     private fun setupViewModel() {
@@ -97,28 +96,6 @@ class DetailActivity : AppCompatActivity() {
                 }
             }
         })
-
-
-        /* val disposable = RetrofitHelper.getRepoApi().getOwner(owner, repo)
-             .subscribeOn(Schedulers.io())
-             .observeOn(AndroidSchedulers.mainThread())
-             .doOnError { throwable ->
-                 Log.v("doOnError", "doOnError:" + throwable.message)
-                 loadFail(throwable)
-             }
-             .subscribe { GithubItem ->
-                 if (GithubItem != null) {
-                     pbGone()
-                     loadSuccess()
-                     binding.numStars.setText("${GithubItem.stargazersCount} stars")
-                     binding.descriptionName.setText(GithubItem.description)
-                 }
-                 if (GithubItem.language == null) {
-                     binding.languageName.setText(R.string.noLanguage)
-                 } else {
-                     binding.languageName.setText(GithubItem.language)
-                 }
-             }*/
     }
 
     private fun loadFollow() {
@@ -142,21 +119,6 @@ class DetailActivity : AppCompatActivity() {
                 }
             }
         })
-        /* val disposable = RetrofitHelper.getUserApi().getUser(owner)
-             .subscribeOn(Schedulers.io())
-             .observeOn(AndroidSchedulers.mainThread())
-             .doOnError { throwable ->
-                 Log.v("doOnError", "doOnError:" + throwable.message)
-                 loadFail(throwable)
-             }
-             .subscribe { User ->
-                 if (User != null) {
-                     pbGone()
-                     loadSuccess()
-                     binding.followerNum.setText(User.followers.toString())
-                     binding.followingNum.setText(User.following.toString())
-                 }
-             }*/
     }
 
     private fun pbShow() {
@@ -173,6 +135,6 @@ class DetailActivity : AppCompatActivity() {
 
     private fun loadFail(t: Throwable) {
         binding.errorPage.visibility = View.VISIBLE
-        Toast.makeText(this, "Error Occured!", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Error Occurred!", Toast.LENGTH_LONG).show()
     }
 }
