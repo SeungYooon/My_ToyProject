@@ -12,8 +12,5 @@ import retrofit2.http.Query
 interface RepoService {
 
     @GET("/search/repositories")
-    suspend fun getRepo(@Query("q") name: String): GithubItem
-
-    @GET("/repos/{owner}/{repo}")
-    suspend fun getOwner(@Path("owner") owner: String, @Path("repo") repo: String): Item
+    fun getRepo(@Query("q") name: String): Single<GithubItem>
 }
