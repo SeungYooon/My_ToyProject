@@ -1,32 +1,25 @@
 package com.example.mytoyproject.main.view
 
-import android.os.Bundle
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import com.bumptech.glide.Glide
 import com.example.mytoyproject.R
-import com.example.mytoyproject.base.UserModelFactory
-import com.example.mytoyproject.base.ViewModelFactory
+import com.example.mytoyproject.base.BaseKotlinActivity
 import com.example.mytoyproject.databinding.ActivityDetailBinding
-import com.example.mytoyproject.main.view.viewmodel.MainViewModel
 import com.example.mytoyproject.main.view.viewmodel.UserViewModel
-import com.example.mytoyproject.network.api.*
-import com.example.mytoyproject.network.model.User
-import com.example.mytoyproject.utils.Status
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.example.mytoyproject.utils.GlideApp
 import kotlinx.android.synthetic.main.activity_detail.*
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : BaseKotlinActivity<ActivityDetailBinding, UserViewModel>() {
 
-    private lateinit var binding: ActivityDetailBinding
-    private lateinit var mainViewModel: MainViewModel
-    private lateinit var userViewModel: UserViewModel
+    override val layoutResourceId: Int
+        get() = R.layout.activity_detail
+
+    override val viewModel: UserViewModel by viewModel()
+
 
     companion object {
         const val REPO = "repo"
@@ -36,105 +29,78 @@ class DetailActivity : AppCompatActivity() {
 
     private val repo: String by lazy { intent.getStringExtra(REPO) }
     private val owner: String by lazy { intent.getStringExtra(OWNER) }
-    private val avatarurl: String by lazy { intent.getStringExtra(AVATAR_URL) }
+    private val avatarUrl: String by lazy { intent.getStringExtra(AVATAR_URL) }
+    private lateinit var url :String
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(
-            this,
-            R.layout.activity_detail
-        )
-
+    override fun initStartView() {
+        pbShow()
         if (intent != null) {
-            binding.nameDetail.setText("$owner/")
-            binding.repoDetail.setText(repo)
-            Glide.with(this).load(avatarurl).override(1024)
-                .into(binding.imgDetail)
+            pbGone()
+            nameDetail.text = "$owner/"
+            repoDetail.text = repo
+            GlideApp.with(this).load(avatarUrl).placeholder(R.drawable.ic_search)
+                .error(R.mipmap.ic_launcher).override(1024)
+                .into(imgDetail)
         }
+    }
 
+    override fun initDataBinding() {
+        viewModel.ownerServiceLiveData.observe(this, Observer { owner ->
+            numStars.text = "${owner.stargazersCount} stars"
+            descriptionName.text = owner.description
+
+            if (owner.language == null) {
+                languageName.setText(R.string.noLanguage)
+            } else {
+                loadSuccess()
+                languageName.text = owner.language
+            }
+        })
+
+        viewModel.userServiceLiveData.observe(this, Observer { user ->
+            if (followerNum.text == null || followingNum.text == null) {
+                loadFail()
+            } else {
+                loadSuccess()
+                followerNum.text = user.followers.toString()
+                followingNum.text = user.following.toString()
+            }
+        })
+
+        viewModel.startEvent.observe(this, Observer {
+            url = "$owner/$repo"
+            intent = Intent(this, TestActivity::class.java)
+            intent.putExtra(TestActivity.URL, url)
+            startActivity(intent)
+            //startActivity(Intent(applicationContext, TestActivity::class.java))
+        })
+    }
+
+    override fun initAfterBinding() {
         BackMain.setOnClickListener { finish() }
 
-        setupViewModel()
-        loadDetail()
-        loadFollow()
-    }
+        viewModel.getOwner(owner, repo)
+        viewModel.getUser(owner)
 
-    private fun setupViewModel() {
-        mainViewModel = ViewModelProviders.of(
-            this, ViewModelFactory(RepoHelper(RetrofitHelper.repoService))
-        ).get(MainViewModel::class.java)
-
-        userViewModel = ViewModelProviders.of(
-            this, UserModelFactory(UserHelper(RetrofitHelper.userService))
-        ).get(UserViewModel::class.java)
-    }
-
-    private fun loadDetail() {
-        pbShow()
-        mainViewModel.getOwner(owner, repo).observe(this, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    pbGone()
-                    it.data?.let { owner ->
-                        if (owner != null) {
-                            loadSuccess()
-                            binding.numStars.setText("${owner.description} stars")
-                            binding.descriptionName.setText(owner.description)
-                        }
-                        if (owner.language == null) {
-                            binding.languageName.setText(R.string.noLanguage)
-                        } else {
-                            binding.languageName.setText(owner.language)
-                        }
-                    }
-                }
-                Status.LOADING -> {
-                    pbShow()
-                }
-                Status.ERROR -> {
-                    loadFail(t = Throwable())
-                }
-            }
-        })
-    }
-
-    private fun loadFollow() {
-        userViewModel.getUser(owner).observe(this, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    pbGone()
-                    it.data?.let { user ->
-                        if (user != null) {
-                            loadSuccess()
-                            binding.followerNum.setText(user.followers.toString())
-                            binding.followingNum.setText(user.following.toString())
-                        }
-                    }
-                }
-                Status.LOADING -> {
-                    pbShow()
-                }
-                Status.ERROR -> {
-                    loadFail(t = Throwable())
-                }
-            }
-        })
+        repoDetail.setOnClickListener {
+            viewModel.doSomething()
+        }
     }
 
     private fun pbShow() {
-        binding.progressBar.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
     }
 
     private fun pbGone() {
-        binding.progressBar.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     private fun loadSuccess() {
-        binding.errorPage.visibility = View.GONE
+        errorPage.visibility = View.GONE
     }
 
-    private fun loadFail(t: Throwable) {
-        binding.errorPage.visibility = View.VISIBLE
+    private fun loadFail() {
+        errorPage.visibility = View.VISIBLE
         Toast.makeText(this, "Error Occurred!", Toast.LENGTH_LONG).show()
     }
 }
