@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="gitItem"
             type="com.example.mytoyproject.network.model.Item" />
@@ -33,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@{gitItem.owner.ownerName}"
+            android:text="@{gitItem.owner.ownerName+'/'}"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@id/imgAvatar"

@@ -8,13 +8,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.annotation.GlideModule
 import com.example.mytoyproject.main.view.DetailActivity
 import com.example.mytoyproject.R
 import com.example.mytoyproject.databinding.ListItemBinding
 import com.example.mytoyproject.network.model.Item
+import com.google.android.material.snackbar.Snackbar
 
-class GitAdapter(private val itemList: ArrayList<Item>) :
-    RecyclerView.Adapter<GitAdapter.ViewHolder>() {
+class GitAdapter : RecyclerView.Adapter<GitAdapter.ViewHolder>() {
+
+    private val itemList = ArrayList<Item>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -34,7 +37,6 @@ class GitAdapter(private val itemList: ArrayList<Item>) :
 
         val listener = View.OnClickListener {
             Toast.makeText(it.context, "move to ${item.repositoryName}", Toast.LENGTH_SHORT).show()
-
             holder.itemView.setBackgroundColor(Color.LTGRAY)
 
             android.os.Handler().postDelayed({
