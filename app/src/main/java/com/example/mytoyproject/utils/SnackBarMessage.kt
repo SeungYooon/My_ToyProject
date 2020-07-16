@@ -1,0 +1,24 @@
+package com.example.mytoyproject.utils
+
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+
+class SnackBarMessage : SingleLiveEvent<Int>() {
+    fun observe(owner: LifecycleOwner, observer: (Int) -> Unit) {
+        super.observe(owner, Observer {
+            it?.run {
+                observer(it)
+            }
+        })
+    }
+}
+
+class SnackBarMessageString : SingleLiveEvent<String>() {
+    fun observe(owner: LifecycleOwner, observer: (String) -> Unit) {
+        super.observe(owner, Observer {
+            it?.run {
+                observer(it)
+            }
+        })
+    }
+}
